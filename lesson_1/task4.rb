@@ -1,17 +1,18 @@
 puts "Введите первый коэффициент"
-a = gets.chomp.to_f
+a = gets.to_f
 
 puts "Введите второй коэффициент"
-b = gets.chomp.to_f
+b = gets.to_f
 
 puts "Введите третий коэффициент"
-c = gets.chomp.to_f
+c = gets.to_f
 
 d = b**2 - 4 * a * c
 
 if d > 0
-  x1 = (-b + Math.sqrt(d)) / (2 * a)
-  x2 = (-b - Math.sqrt(d)) / (2 * a)
+  square_root = Math.sqrt(d)
+  x1 = (-b + square_root) / (2 * a)
+  x2 = (-b - square_root) / (2 * a)
   puts "Дискриминант d = #{d}"
   puts "Корень x1 = #{x1}; Корень x2 = #{x2}"
 elsif d == 0
