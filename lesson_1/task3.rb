@@ -17,14 +17,11 @@ else
   kat2 = b    
 end
 
-big_side_sq = big_side**2
-kat1_sq = kat1**2
-kat2_sq = kat2**2
-sum_kat = kat1_sq + kat2_sq 
+right_triangle = big_side**2 == kat1**2 + kat2**2 
 
-if big_side_sq == sum_kat && kat1 == kat2
+if right_triangle && kat1 == kat2
   puts "Треугольник является прямоугольным и равнобедренным"
-elsif  big_side_sq == sum_kat
+elsif  right_triangle
   puts "Треугольник является прямоугольным"
 elsif a == b && b == c 
   puts "Треугольник равнобедренный и равносторонний" 
