@@ -20,10 +20,11 @@ end
 big_side_sq = big_side**2
 kat1_sq = kat1**2
 kat2_sq = kat2**2
+sum_kat = kat1_sq + kat2_sq 
 
-if big_side_sq == kat1_sq + kat2_sq && kat1 == kat2
+if big_side_sq == sum_kat && kat1 == kat2
   puts "Треугольник является прямоугольным и равнобедренным"
-elsif  big_side_sq == kat1_sq + kat2_sq
+elsif  big_side_sq == sum_kat
   puts "Треугольник является прямоугольным"
 elsif a == b && b == c 
   puts "Треугольник равнобедренный и равносторонний" 
