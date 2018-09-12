@@ -21,7 +21,7 @@ right_triangle = big_side**2 == kat1**2 + kat2**2
 
 if right_triangle && kat1 == kat2
   puts "Треугольник является прямоугольным и равнобедренным"
-elsif  right_triangle
+elsif right_triangle
   puts "Треугольник является прямоугольным"
 elsif a == b && b == c 
   puts "Треугольник равнобедренный и равносторонний" 
