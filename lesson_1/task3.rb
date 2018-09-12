@@ -3,17 +3,28 @@ a = gets.to_f
 b = gets.to_f
 c = gets.to_f
 
-f_side = a**2
-s_side = b**2
-t_side = c**2
+if a > b && a > c 
+  big_side = a
+  kat1 = b
+  kat2 = c
+elsif b > a && b > c
+  big_side = b
+  kat1 = a
+  kat2 = c
+else
+  big_side = c
+  kat1 = a
+  kat2 = b    
+end
 
-if f_side == s_side + t_side || s_side == f_side + t_side || t_side == f_side + s_side
+big_side_sq = big_side**2
+kat1_sq = kat1**2
+kat2_sq = kat2**2
+
+if big_side_sq == kat1_sq + kat2_sq && kat1 == kat2
+  puts "Треугольник является прямоугольным и равнобедренным"
+elsif  big_side_sq == kat1_sq + kat2_sq
   puts "Треугольник является прямоугольным"
-  if a == b || a == c || b == c
-    puts "Треугольник также равнобедренный"
-  end
-end 
-
-if a == b && b == c
-  puts "Треугольник равнобедренный и равносторонний"
+elsif a == b && b == c 
+  puts "Треугольник равнобедренный и равносторонний" 
 end
