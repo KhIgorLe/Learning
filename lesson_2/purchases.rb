@@ -36,10 +36,10 @@ puts products
 
 total_cost_basket = 0
 
-products.each do |key, value|
-  total_amount_product = value[:cost] * value[:quantity] 
+products.each do |name_product, cost_quantity|
+  total_amount_product = cost_quantity[:cost] * cost_quantity[:quantity] 
   total_cost_basket += total_amount_product 
-  puts "Итоговая сумма за #{key} = #{total_amount_product}"
+  puts "Итоговая сумма за #{name_product} = #{total_amount_product}"
 end
 
 puts "Итоговая сумму всех покупок = #{total_cost_basket}"
