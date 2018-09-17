@@ -18,15 +18,11 @@ month = gets.to_i
 puts "Введите год"
 year = gets.to_i
 
-count_days_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31 ,30, 31]
-count_days_month[1] = 29 if year % 4 == 0 || year % 400 == 0 && year % 100 !=0 
+amount_days_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31 ,30, 31]
+amount_days_month[1] = 29 if (year % 4 == 0 && year % 100 != 0) || year % 400 == 0
 
-count_days_year = 0
+number_month = month - 1
+amount_days = amount_days_month.take(number_month)
+amount_days_year = amount_days.sum + day
 
-for i in 0..month - 2
-  count_days_year += count_days_month[i]
-end
-
-count_days_year += day 
-
-puts count_days_year
+puts amount_days_year
