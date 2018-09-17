@@ -9,24 +9,17 @@
 Вычислить и вывести на экран итоговую сумму всех покупок в "корзине".
 =end
 
-name_product = ""
-cost = ""
-quantity = ""
-
 products = {}
-
 puts "Введите название товара"
-  name_product = gets.chomp
-
+name_product = gets.chomp
 while name_product != "стоп" do
-  
   puts "Введите цену за еденицу товара"
   cost = gets.to_f
 
   puts "Введите количество купленного товара"
   quantity = gets.to_f
 
-  products[name_product] = {cost: cost, quantity: quantity}
+  products[name_product] = { cost: cost, quantity: quantity }
 
   puts "Введите название товара"
   name_product = gets.chomp
@@ -36,10 +29,10 @@ puts products
 
 total_cost_basket = 0
 
-products.each do |name_product, cost_quantity|
-  total_amount_product = cost_quantity[:cost] * cost_quantity[:quantity] 
-  total_cost_basket += total_amount_product 
-  puts "Итоговая сумма за #{name_product} = #{total_amount_product}"
+products.each do |product, cost_quantity|
+  total_amount_product = cost_quantity[:cost] * cost_quantity[:quantity]
+  total_cost_basket += total_amount_product
+  puts "Итоговая сумма за #{product} = #{total_amount_product}"
 end
 
 puts "Итоговая сумму всех покупок = #{total_cost_basket}"

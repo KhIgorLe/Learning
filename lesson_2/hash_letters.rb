@@ -6,9 +6,7 @@ vowels_letters = ["a", "e", "i", "o", "u"]
 vowels_lettes_with_number = {}
 
 alphabet.each_with_index do |leter, number| 
-  if vowels_letters.include?(leter)
-    vowels_lettes_with_number[leter] = number + 1
-  end
+  vowels_lettes_with_number[leter] = number + 1 if vowels_letters.include?(leter)
 end
 
 puts vowels_lettes_with_number
