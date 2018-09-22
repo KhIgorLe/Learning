@@ -8,31 +8,22 @@
 =end
 
 class Station
-  attr_reader :list_trains
-  attr_reader :name_station
+  attr_reader :trains, :name
 
   def initialize(name_station)
-    @name_station = name_station
-    @list_trains = []
+    @name = name_station
+    @trains = []
   end
 
   def take_train(train)
-    @list_trains << train
-    puts "Поезд номер #{train.number_train} прибыл на станцию"
+    @trains << train
   end
 
-  def show_list_train
-    @list_trains.each { |train| puts "Поезд #{train.number_train} находится на станции"}
-  end
-
-  def show_train_by_type(type)
-    count_type = 0
-    @list_trains.each { |train| count_type += 1 if train.type.eql?(type) }
-    puts "Поезд #{type} - количество #{count_type}"   
-  end
+ def count_train_type(type)
+    @trains.count { |train| train.type.eql?(type) }
+ end
 
   def send_train(train)
-    @list_trains.delete(train)
-    puts "Поезд #{train.number_train} отправился со станции"
+    @trains.delete(train)
   end
 end

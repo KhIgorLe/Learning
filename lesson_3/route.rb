@@ -7,24 +7,23 @@
 =end
 
 class Route
-  attr_reader :list_station
+  attr_reader :stations
 
   def initialize(begin_station, end_station)
-    @begin_station
-    @end_station
-    @list_station = [begin_station, end_station]
+    @stations = [begin_station, end_station]
   end
 
   def add_intermediate_station(name_station)
-    @list_station.insert(-2, name_station)
+    @stations.insert(-2, name_station)
   end
 
   def del_intermediate_station(name_station)
-    @list_station.delete(name_station) if
-    list_station.first != name_station && list_station.last != name_station
+    if ![@stations.first, @stations.last].include?(name_station)
+      @stations.delete(name_station)
+    end
   end
 
   def list_all_station
-    @list_station.each { |name| puts "Станция #{name}" }
+    @stations.each { |name| puts "Станция #{name}" }
   end
 end
