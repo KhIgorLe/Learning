@@ -19,9 +19,9 @@ class Station
     @trains << train
   end
 
- def count_train_type(type)
+  def count_train_type(type)
     @trains.count { |train| train.type.eql?(type) }
- end
+  end
 
   def send_train(train)
     @trains.delete(train)

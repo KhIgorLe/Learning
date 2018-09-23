@@ -16,11 +16,11 @@
 =end
 
 class Train
-  attr_reader :speed, :number_wagons, :type, :route
-  attr_reader :current_station, :number_train
+  attr_reader :speed, :number_wagons, :type, :stations, :current_station, :number
+  attr_reader :next_station, :previouse_station
 
-  def initialize(number_train, type, number_wagons, speed = 0)
-    @number_train = number_train
+  def initialize(number, type, number_wagons, speed = 0)
+    @number = number
     @type = type
     @number_wagons = number_wagons
     @speed = speed
@@ -31,7 +31,7 @@ class Train
   end
 
   def decrease_speed(speed)
-    @speed -= speed if @speed - speed >= 0
+    @speed -= speed if @speed > speed
   end
 
   def add_wagon
@@ -39,13 +39,17 @@ class Train
   end
 
   def del_wagon
-    @number_wagons -= 1 if @speed == 0
+    @number_wagons -= 1 if @speed == 0 && @number_wagons.positive?
+  end
+
+  def current_station
+    @current_station = @stations[@index_station]
   end
 
   def take_route(route)
-    @route = route.stations
-    @index_station = route.stations.index(route.stations[0])
-    @current_station = route.stations[@index_station]
+    @stations = route.stations
+    @index_station = 0
+    current_station
     station_take_train
   end
 
@@ -53,27 +57,28 @@ class Train
     @current_station.take_train(self)
   end
 
-  def go_next_station(route)
-    if @index_station < route.stations.index(route.stations.last)
-      @index_station += 1 
-      @current_station = route.stations[@index_station]
+  def go_next_station
+    if @index_station < @stations.length - 1
+      @index_station += 1
+      current_station
       station_take_train
-    end 
+    end
   end
-
-  def go_back_station(route)
+  
+  def go_previouse_station
     if @index_station > 0
       @index_station -= 1
-      @current_station = route.stations[@index_station]
+      current_station
       station_take_train
     end
   end
 
-  def next_station(route)
-    @next_station = route.stations[@index_station + 1]
+  def next_station
+    @next_station = @stations[@index_station + 1]
   end
 
-  def back_station(route)
-    @back_station = route.stations[@index_station - 1] if @index_station > 0
+  def previouse_station
+    @previouse_station = @stations[@index_station - 1] if @index_station > 0
   end
 end
+
