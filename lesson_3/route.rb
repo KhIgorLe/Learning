@@ -18,9 +18,7 @@ class Route
   end
 
   def del_intermediate_station(name_station)
-    unless [@stations.first, @stations.last].include?(name_station)
-      @stations.delete(name_station)
-    end
+    @stations.delete(name_station) unless [@stations.first, @stations.last].include?(name_station)
   end
 
   def list_all_station
