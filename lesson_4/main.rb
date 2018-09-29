@@ -21,6 +21,21 @@ require_relative 'route'
 require_relative 'station'
 
 class Main
+  MAIN_MENU = <<-MENU
+    Выберите пункт меню:
+    Введите 1 - cоздавать станции
+    Введите 2 - создавать поезда
+    Введите 3 - создавать маршруты
+    Введите 4 - добавить станцию в маршрут
+    Введите 5 - удалить станцию в маршруте 
+    Введите 6 - назначать маршрут поезду
+    Введите 7 - Добавлять вагоны к поезду
+    Введите 8 - Отцеплять вагоны от поезда
+    Введите 9 - Перемещать поезд по маршруту вперед
+    Введите 10 - Перемещать поезд по маршруту назад
+    Введите 11 - Просматривать список станций и список поездов на станции
+    Введите 0 - Выйти из программы
+  MENU
 
   def initialize
     @stations = []
@@ -33,19 +48,7 @@ class Main
   def run
     command = ""
     while command != 0
-      puts "Выберите пункт меню:"
-      puts "Введите 1 - cоздавать станции"
-      puts "Введите 2 - создавать поезда"
-      puts "Введите 3 - создавать маршруты"
-      puts "Введите 4 - добавить станцию в маршрут"
-      puts "Введите 5 - удалить станцию в маршруте" 
-      puts "Введите 6 - назначать маршрут поезду"
-      puts "Введите 7 - Добавлять вагоны к поезду"
-      puts "Введите 8 - Отцеплять вагоны от поезда"
-      puts "Введите 9 - Перемещать поезд по маршруту вперед"
-      puts "Введите 10 - Перемещать поезд по маршруту назад"
-      puts "Введите 11 - Просматривать список станций и список поездов на станции"
-      puts "Введите 0 - Выйти из программы"  
+      puts MAIN_MENU
       command = gets.to_i
       case command
         when 1 then create_station  
@@ -66,6 +69,8 @@ class Main
     end
   end
 
+  private
+
   def create_station
     puts "Введите название станции"
     name = gets.chomp
@@ -77,19 +82,17 @@ class Main
   def create_train
     puts "Введите номер поезда"
     number = gets.chomp
-    puts "Выберите тип поезду 1 - Пассажирский, 2 - Грузовой"
+    puts "Выберите 1 - создать пассажирский, 2 - создать грузовой поезд"
     choise = gets.to_i
     case choise
       when 1
-         type = "Пассажирский"
-         train = PassengerTrain.new(number, type)
+         train = PassengerTrain.new(number)
          @trains << train
-         puts "#{type} поезд номер #{number}"
+         puts "Пассажирский поезд номер #{number} создан"
       when 2
-         type = "Грузовой"
-         train = CargoTrain.new(number, type)
+         train = CargoTrain.new(number)
          @trains << train
-         puts "#{type} поезд номер #{number} создан"
+         puts "Грузовой поезд номер #{number} создан"
     end
   end
 
@@ -144,7 +147,7 @@ class Main
       @routs[number_route].del_intermediate_station(@stations[number_station])
     end
   end
-  
+
   def take_route_for_train
     if @routs.empty?
       puts "Вы не создали маршрут"
@@ -174,20 +177,21 @@ class Main
       end
       puts "Выберите поезд"
       train = gets.to_i
-      if @trains[train].is_a?(PassengerTrain) && @trains[train].speed == 0
-        puts "Введите номер вагона"
-        number_wagon = gets.to_i
-        passenger_wagon = PassengerWagon.new(number_wagon)
-        @trains[train].add_wagon(passenger_wagon)
-        @wagons << passenger_wagon
+      selected_train = @trains[train]
+      return unless selected_train.speed == 0
+      wagon_class = case selected_train
+        when PassengerTrain
+          PassengerWagon
+        when CargoTrain
+          FreightWagon
+        else
+          return
       end
-      if @trains[train].is_a?(CargoTrain) && @trains[train].speed == 0
-        puts "Введите номер вагона"
-        number_wagon = gets.to_i
-        freight_wagon = FreightWagon.new(number_wagon)
-        @trains[train].add_wagon(freight_wagon)
-        @wagons << freight_wagon
-      end
+      puts "Введите номер вагона"
+      number_wagon = gets.to_i
+      wagon = wagon_class.new(number_wagon)
+      selected_train.add_wagon(wagon)
+      @wagons << wagon
     end
   end
 
