@@ -51,20 +51,20 @@ class Main
       puts MAIN_MENU
       command = gets.to_i
       case command
-        when 1 then create_station  
-        when 2 then create_train
-        when 3 then create_route
-        when 4 then add_station_in_route
-        when 5 then del_station_in_route
-        when 6 then take_route_for_train
-        when 7 then add_wagon_for_train
-        when 8 then del_wagon_for_train
-        when 9 then move_train_route_forward
-        when 10 then move_train_route_back
-        when 11 then show_information
-        when 0 then break 
-        else
-          puts "Команда введена не правильно"
+      when 1 then create_station
+      when 2 then create_train
+      when 3 then create_route
+      when 4 then add_station_in_route
+      when 5 then del_station_in_route
+      when 6 then take_route_for_train
+      when 7 then add_wagon_for_train
+      when 8 then del_wagon_for_train
+      when 9 then move_train_route_forward
+      when 10 then move_train_route_back
+      when 11 then show_information
+      when 0 then break
+      else
+        puts "Команда введена не правильно"
       end
     end
   end
@@ -74,9 +74,17 @@ class Main
   def create_station
     puts "Введите название станции"
     name = gets.chomp
-    @stations << Station.new(name)
-    @count_stations += 1
-    puts "Станция #{name} создана"
+    if station_present?(name)
+      puts "Станция уже существует"
+    else
+      @stations << Station.new(name)
+      @count_stations += 1
+      puts "Станция #{name} создана"
+    end
+  end
+
+  def station_present?(name)
+    @stations.map(&:name).include?(name)
   end
 
   def create_train
@@ -85,20 +93,21 @@ class Main
     puts "Выберите 1 - создать пассажирский, 2 - создать грузовой поезд"
     choise = gets.to_i
     case choise
-      when 1
-         train = PassengerTrain.new(number)
-         @trains << train
-         puts "Пассажирский поезд номер #{number} создан"
-      when 2
-         train = CargoTrain.new(number)
-         @trains << train
-         puts "Грузовой поезд номер #{number} создан"
+    when 1
+      train = PassengerTrain.new(number)
+      @trains << train
+      puts "Пассажирский поезд номер #{number} создан"
+    when 2
+      train = CargoTrain.new(number)
+      @trains << train
+      puts "Грузовой поезд номер #{number} создан"
     end
   end
 
   def create_route
     if @stations.empty?
-      puts "Для создания маршрута необходимо создать две станции"
+      station_text
+      puts "Необходимо как минимум две станции"
     elsif @count_stations < 2
       puts "Для создания маршрута необходимо создать две станции, первая станция уже создана"
     else
@@ -110,41 +119,21 @@ class Main
 
   def add_station_in_route
     if @stations.empty?
-      puts "Вы не создали станцию"
+      station_text
     elsif @routs.empty?
       puts "Вы не создали маршрут"
     else
-      @routs.each_with_index do |route, number|
-        puts "маршрут #{route.name} - номер #{number}"
-      end
-      puts "Введите номер маршрута"
-      number_route = gets.to_i
-      @stations.each_with_index do |station, number|
-        puts "станция #{station.name} - номер #{number}"
-      end
-      puts "Введите номер станции"
-      number_station = gets.to_i
-      @routs[number_route].add_intermediate_station(@stations[number_station])
+      get_route.add_intermediate_station(get_station)
     end
   end
 
   def del_station_in_route
     if @stations.empty?
-      puts "Вы не создали станцию"
+      station_text
     elsif @routs.empty?
       puts "Вы не создали маршрут"
     else
-      @routs.each_with_index do |route, number|
-        puts "маршрут #{route.name} - номер #{number}"
-      end
-      puts "Введите номер маршрута"
-      number_route = gets.to_i
-      @stations.each_with_index do |station, number|
-        puts "станция #{station.name} - номер #{number}"
-      end
-      puts "Введите номер станции"
-      number_station = gets.to_i
-      @routs[number_route].del_intermediate_station(@stations[number_station])
+      get_route.del_intermediate_station(get_station)
     end
   end
 
@@ -152,94 +141,99 @@ class Main
     if @routs.empty?
       puts "Вы не создали маршрут"
     elsif @trains.empty?
-      puts "Вы не создали поезд"
+      create_train_text
     else
-      @routs.each_with_index do |route, number|
-        puts "маршрут #{route.name} - номер #{number}"
-      end
-      puts "Введите номер маршрута"
-      number_route = gets.to_i
-      @trains.each_with_index do |train, number|
-        puts "поед #{train.number} - номер #{number}"
-      end
-      puts "Введите номер поезда"
-      number_train = gets.to_i
-      @trains[number_train].take_route(@routs[number_route])
+      get_train.take_route(get_route)
     end
   end
 
   def add_wagon_for_train
     if @trains.empty?
-      puts "Создайте поезд"
+      create_train_text
     else
-      @trains.each_with_index do |train, number|
-        puts "поезд #{train.number} - номер #{number}"
-      end
-      puts "Выберите поезд"
-      train = gets.to_i
-      selected_train = @trains[train]
-      return unless selected_train.speed == 0
-      wagon_class = case selected_train
-        when PassengerTrain
-          PassengerWagon
-        when CargoTrain
-          FreightWagon
-        else
-          return
-      end
-      puts "Введите номер вагона"
+      train = get_train
+      return if train.speed != 0
+      wagon_class = train.accept_class_wagon
+      select_wagon_text
       number_wagon = gets.to_i
       wagon = wagon_class.new(number_wagon)
-      selected_train.add_wagon(wagon)
+      train.add_wagon(wagon)
       @wagons << wagon
     end
   end
 
   def del_wagon_for_train
     if @trains.empty?
-      puts "Создайте поезд"
+      create_train_text
     elsif @wagons.empty?
       puts "Добавьте вагон к поезду"
     else
-      @trains.each_with_index do |train, number|
-        puts "поезд #{train.number} - номер #{number}"
-      end
-      puts "Выберите номер поезд"
-      train = gets.to_i
-      @wagons.each_with_index {|wagon, number| puts "Вагон номер #{wagon.number} - номер #{number}"}
-      puts "Выберите номер вагона"
-      wagon = gets.to_i
-      @trains[train].del_wagon(@wagons[wagon]) if @trains[train].speed == 0
+      train = get_train
+      train.del_wagon(get_wagon) if train.speed == 0
     end
   end
 
   def move_train_route_forward
     if @trains.empty?
-      puts "Создайте поезд"
+      create_train_text
     else
-      @trains.each_with_index { |train, number| puts "поезд #{train.number} - номер #{number}" }
-      puts "Выберите номер поезда"
-      train = gets.to_i
-      @trains[train].go_next_station
+      get_train.go_next_station
     end
   end
 
   def move_train_route_back
     if @trains.empty?
-      puts "Создайте поезд"  
+      create_train_text
     else
-      @trains.each_with_index { |train, number| puts "поезд #{train.number} - номер #{number}" }
-      puts "Выберите номер поезд"
-      train = gets.to_i
-      @trains[train].go_previouse_station
+      get_train.go_previouse_station
     end
   end
 
   def show_information
-    @stations.each do |station| 
+    @stations.each do |station|
       puts "Станция #{station.name}:"
       station.trains.each { |train| puts "Поезд #{train.number}"}
     end
+  end
+
+  def get_train
+    @trains.each_with_index { |train, number| puts "поезд #{train.number} - номер #{number}" }
+    puts "Выберите номер поезд"
+    train = gets.to_i
+    @trains[train]
+  end
+
+  def get_route
+    @routs.each_with_index { |route, number| puts "маршрут #{route.name} - номер #{number}" }
+    puts "Введите номер маршрута"
+    number_route = gets.to_i
+    @routs[number_route]
+  end
+
+  def get_station
+    @stations.each_with_index { |station, number| puts "станция #{station.name} - номер #{number}"}
+    puts "Введите номер станции"
+    number_station = gets.to_i
+    @stations[number_station]
+  end
+
+  def get_wagon
+    @wagons.each_with_index {|wagon, number| puts "Вагон номер #{wagon.number} - номер #{number}"}
+    select_wagon_text
+    wagon = gets.to_i
+    @wagons[wagon]
+  end
+
+  def station_text
+    puts "Вы не создали станцию"
+  end
+
+  def create_train_text
+    puts "Создайте поезд"
+  end
+
+  def select_wagon_text
+    puts "Введите номер вагона"
   end
 end
 

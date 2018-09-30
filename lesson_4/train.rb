@@ -34,7 +34,7 @@ class Train
   end
 
   def add_wagon(wagon)
-    @wagons << wagon if @speed == 0
+    @wagons << wagon if @speed == 0 && wagon.is_a?(accept_class_wagon)
   end
 
   def del_wagon(wagon)

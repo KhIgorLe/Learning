@@ -3,7 +3,7 @@ class PassengerTrain < Train
     super(number, "Пассажирский")
   end
 
-  def add_wagon(wagon)
-    super if wagon.is_a? PassengerWagon
+  def accept_class_wagon
+    PassengerWagon
   end
 end
