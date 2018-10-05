@@ -11,8 +11,7 @@ module InstanceCounter
     end
 
     def increment_instances
-      @instances ||= 0
-      @instances += 1
+      @instances = instances + 1
     end
   end
 
