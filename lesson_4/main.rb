@@ -34,6 +34,7 @@ class Main
     Введите 9 - Перемещать поезд по маршруту вперед
     Введите 10 - Перемещать поезд по маршруту назад
     Введите 11 - Просматривать список станций и список поездов на станции
+    Введите 12 - Просматривать станции для поезда
     Введите 0 - Выйти из программы
   MENU
 
@@ -62,6 +63,7 @@ class Main
       when 9 then move_train_route_forward
       when 10 then move_train_route_back
       when 11 then show_information
+      when 12 then show_station_for_train  
       when 0 then break
       else
         puts "Команда введена не правильно"
@@ -194,6 +196,12 @@ class Main
       puts "Станция #{station.name}:"
       station.trains.each { |train| puts "Поезд #{train.number}"}
     end
+  end
+
+  def show_station_for_train
+    train = get_train
+    puts "Поезд #{train.number} имеет станции:"
+    train.route.stations.each { |station| puts "#{station.name }" }
   end
 
   def get_train
