@@ -107,8 +107,8 @@ class Main
       @trains << train
       puts "Грузовой поезд номер #{number} создан"
     end
-    rescue RuntimeError => e
-      puts "#{e.message}"
+  rescue RuntimeError => e
+    puts "#{e.message}"
     retry
   end
 

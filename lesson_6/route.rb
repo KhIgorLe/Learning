@@ -15,8 +15,8 @@ class Route
   def initialize(begin_station, end_station)
     @stations = [begin_station, end_station]
     @name = "#{begin_station.name} - #{end_station.name}"
-    register_instance
     validate!
+    register_instance
   end
 
   def add_intermediate_station(name_station)
@@ -41,6 +41,7 @@ class Route
   protected
 
   def validate!
-    raise "Маршрут не может быть без станций" if @stations.first.nil? || @stations.last.nil? 
+    raise "Маршрут не может быть без станций" if @stations.first.nil? || @stations.last.nil?
+    raise "Маршурт создан не из станций" unless (@stations.last.is_a? Station) && (@stations.first.is_a? Station)
   end
 end

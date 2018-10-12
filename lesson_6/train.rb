@@ -23,7 +23,7 @@ class Train
 
   attr_reader :speed, :type, :route, :number, :wagons
 
-  NUMBER_FORMAT = /^[а-я0-9]{3}-*[а-я0-9]{2}$/i
+  NUMBER_FORMAT = /^[а-я0-9ё]{3}-?[а-я0-9ё]{2}$/i
 
   @@trains = {}
 
@@ -33,9 +33,9 @@ class Train
     @type = type
     @speed = speed
     @wagons = []
+    validate!
     @@trains[number] = self
     register_instance
-    validate!
   end
 
   def self.all
