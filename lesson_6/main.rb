@@ -97,11 +97,9 @@ class Main
     choise = gets.to_i
     case choise
     when 1
-      begin
       train = PassengerTrain.new(number)
       @trains << train
       puts "Пассажирский поезд номер #{number} создан"
-    end
     when 2
       train = CargoTrain.new(number)
       @trains << train
