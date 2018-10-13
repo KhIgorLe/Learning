@@ -8,9 +8,11 @@
 =end
 
 require_relative 'instance_counter'
+require_relative 'valid'
 
 class Station
   include InstanceCounter
+  include Valid
   attr_reader :trains, :name
 
   @@stations = []
@@ -37,13 +39,6 @@ class Station
 
   def send_train(train)
     @trains.delete(train)
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   protected

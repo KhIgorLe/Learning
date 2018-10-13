@@ -1,17 +1,14 @@
+require_relative 'company'
+require_relative 'valid'
+
 class Wagon
   include Company
+  include Valid
   attr_reader :number
 
   def initialize(number)
     @number = number
     validate!
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   protected

@@ -106,7 +106,7 @@ class Main
       puts "Грузовой поезд номер #{number} создан"
     end
   rescue RuntimeError => e
-    puts "#{e.message}"
+    puts e.message
     retry
   end
 

@@ -7,9 +7,11 @@
 =end
 
 require_relative 'instance_counter'
+require_relative 'valid'
 
 class Route
   include InstanceCounter
+  include Valid
   attr_reader :stations, :name
 
   def initialize(begin_station, end_station)
@@ -31,17 +33,10 @@ class Route
     @stations.each { |name| puts "Станция #{name}" }
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end
-
   protected
 
   def validate!
     raise "Маршрут не может быть без станций" if @stations.first.nil? || @stations.last.nil?
-    raise "Маршурт создан не из станций" unless (@stations.last.is_a? Station) && (@stations.first.is_a? Station)
+    raise "Маршурт создан не из станций" unless @stations.last.is_a?(Station) && @stations.first.is_a?(Station)
   end
 end

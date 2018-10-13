@@ -16,10 +16,12 @@
 =end
 require_relative 'company'
 require_relative 'instance_counter'
+require_relative 'valid'
 
 class Train
   include Company
   include InstanceCounter
+  include Valid
 
   attr_reader :speed, :type, :route, :number, :wagons
 
@@ -94,13 +96,6 @@ class Train
 
   def previouse_station
     @route.stations[@index_station - 1] if @index_station > 0
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   protected
