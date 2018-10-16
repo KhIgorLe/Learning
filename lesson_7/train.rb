@@ -98,7 +98,7 @@ class Train
     @route.stations[@index_station - 1] if @index_station > 0
   end
 
-  def list_wagon(&wagon)
+  def each_wagon
     @wagons.each { |wagon| yield(wagon) }
   end
 

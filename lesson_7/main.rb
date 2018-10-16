@@ -216,13 +216,14 @@ class Main
       add_wagon_text
     else
       train = get_train
+      wagon = select_wagon_for_train(train)
       wagon_class = train.accept_class_wagon
       if wagon_class == PassengerWagon
-        train.list_wagon { |wagon| wagon.take_place }
+        wagon.take_place_or_volume
       elsif wagon_class == FreightWagon
         puts "Введите объем груза"
         volume = gets.to_i
-        train.list_wagon { |wagon| wagon.take_volume(volume) }
+        wagon.take_place_or_volume(volume)
       end
     end
   end
@@ -230,7 +231,7 @@ class Main
   def show_list_trains_for_station
     @stations.each do |station|
       puts "На станции #{station.name} находятся поезда:"
-      station.list_trains do |train|
+      station.each_trains do |train|
         puts "Номер поезда #{train.number}, Тип #{train.type}, Количество вагонов - #{train.wagons.size}"
       end
     end
@@ -240,11 +241,11 @@ class Main
     @trains.each do |train|
       puts "У поезда номер #{train.number}:"
       wagon_class = train.accept_class_wagon
-      train.list_wagon do |wagon|
+      train.each_wagon do |wagon|
         if wagon_class == PassengerWagon
-          information_passenger_wagon(wagon, train)
+          information_wagon(wagon, train)
         elsif wagon_class = FreightWagon
-          information_freight_wagon(wagon, train)
+          information_wagon(wagon, train)
         end
       end
     end
@@ -284,18 +285,18 @@ class Main
     @wagons[wagon]
   end
 
-  def information_passenger_wagon(wagon, train)
-    puts "Номер вагона #{wagon.number}: 
-          типа вагона #{train.type},
-          свободных мест #{wagon.quantity_empty_places},
-          занятых мест #{wagon.quantity_occupied_places}"
+  def select_wagon_for_train(train)
+    train.wagons.each_with_index { |wagon, number| puts "Вагон номер #{wagon.number} - номер #{number}" }
+    select_wagon_text
+    wagon = gets.to_i
+    train.wagons[wagon]
   end
 
-  def information_freight_wagon(wagon, train)
+  def information_wagon(wagon, train)
     puts "Номер вагона #{wagon.number}: 
           типа вагона #{train.type},
-          свободный объём #{wagon.available_volume},
-          занятый объём #{wagon.occupied_volume}"
+          свободных мест #{wagon.quantity_empty_places_or_volume},
+          занятых мест #{wagon.quantity_occupied_places_or_volume}"
   end
 
   def station_text
