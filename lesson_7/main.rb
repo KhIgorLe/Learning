@@ -68,7 +68,7 @@ class Main
       when 11 then show_list_trains_for_station
       when 12 then show_station_for_train
       when 13 then show_list_wagons_for_train
-      when 14 then take_place_or_volume_in_wagon
+      when 14 then take_volume_in_wagon
       when 0 then break
       else
         puts "Команда введена не правильно"
@@ -211,7 +211,7 @@ class Main
     end
   end
 
-  def take_place_or_volume_in_wagon
+  def take_volume_in_wagon
     if @wagons.empty?
       add_wagon_text
     else
@@ -219,11 +219,11 @@ class Main
       wagon = select_wagon_for_train(train)
       wagon_class = train.accept_class_wagon
       if wagon_class == PassengerWagon
-        wagon.take_place_or_volume
+        wagon.take_volume
       elsif wagon_class == FreightWagon
         puts "Введите объем груза"
         volume = gets.to_i
-        wagon.take_place_or_volume(volume)
+        wagon.take_volume(volume)
       end
     end
   end
@@ -244,7 +244,7 @@ class Main
       train.each_wagon do |wagon|
         if wagon_class == PassengerWagon
           information_wagon(wagon, train)
-        elsif wagon_class = FreightWagon
+        elsif wagon_class == FreightWagon
           information_wagon(wagon, train)
         end
       end
@@ -293,10 +293,12 @@ class Main
   end
 
   def information_wagon(wagon, train)
-    puts "Номер вагона #{wagon.number}: 
-          типа вагона #{train.type},
-          свободных мест #{wagon.quantity_empty_places_or_volume},
-          занятых мест #{wagon.quantity_occupied_places_or_volume}"
+    a = "Вагон номер #{wagon.number}: типа вагона #{train.type},"       
+    if train.accept_class_wagon == PassengerWagon
+      puts "#{a} свободных мест #{wagon.empty_volume}, занятых мест #{wagon.occupied_volume}"
+    elsif train.accept_class_wagon == FreightWagon
+      puts "#{a} свободный объём #{wagon.empty_volume}, занятый объём #{wagon.occupied_volume}"
+    end
   end
 
   def station_text
