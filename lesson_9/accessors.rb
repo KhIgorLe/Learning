@@ -1,4 +1,4 @@
-module Acсessors
+module Accessors
   def attr_accessor_with_history(*args)
     args.each do |arg|
       var_name      = "@#{arg}".to_sym
@@ -7,10 +7,11 @@ module Acсessors
       define_method(arg) { instance_variable_get(var_name) }
 
       define_method("#{arg}=".to_sym) do |value|
+        old_value = send(arg)
         instance_variable_set(var_name, value)
 
         array = instance_variable_get(var_name_hist) || []
-        array << instance_variable_get(var_name)
+        array << old_value
         instance_variable_set var_name_hist, array
       end
 

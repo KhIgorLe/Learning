@@ -1,10 +1,10 @@
 require_relative 'company'
-require_relative 'acсessors'
+require_relative 'accessors'
 require_relative 'validation'
 
 class Wagon
   include Company
-  extend Acсessors
+  extend Accessors
   include Validation
 
   attr_reader :number, :occupied_volume

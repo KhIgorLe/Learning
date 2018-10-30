@@ -1,10 +1,10 @@
 require_relative 'instance_counter'
-require_relative 'acсessors'
+require_relative 'accessors'
 require_relative 'validation'
 
 class Route
   include InstanceCounter
-  extend Acсessors
+  extend Accessors
   include Validation
 
   attr_accessor_with_history :stations, :name
